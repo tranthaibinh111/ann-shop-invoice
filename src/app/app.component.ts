@@ -1,8 +1,5 @@
 import { AfterViewInit, Component, Inject, NgZone, OnInit, PLATFORM_ID } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { CartService } from './shared/services/cart.service';
-import { CompareService } from './shared/services/compare.service';
-import { WishlistService } from './shared/services/wishlist.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { CurrencyService } from './shared/services/currency.service';
@@ -17,9 +14,6 @@ export class AppComponent implements AfterViewInit, OnInit {
     @Inject(PLATFORM_ID) private platformId: any,
     private router: Router,
     private toastr: ToastrService,
-    private cart: CartService,
-    private compare: CompareService,
-    private wishlist: WishlistService,
     private zone: NgZone,
     private scroller: ViewportScroller,
     private currency: CurrencyService
@@ -40,15 +34,6 @@ export class AppComponent implements AfterViewInit, OnInit {
       if ((event instanceof NavigationEnd)) {
         this.scroller.scrollToPosition([0, 0]);
       }
-    });
-    this.cart.onAdding$.subscribe(product => {
-      this.toastr.success(`Product "${product.name}" added to cart!`);
-    });
-    this.compare.onAdding$.subscribe(product => {
-      this.toastr.success(`Product "${product.name}" added to compare!`);
-    });
-    this.wishlist.onAdding$.subscribe(product => {
-      this.toastr.success(`Product "${product.name}" added to wish list!`);
     });
   }
 
