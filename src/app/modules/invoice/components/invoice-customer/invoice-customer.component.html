@@ -1,103 +1,197 @@
 <div class="container">
   <div class="row">
-      <div class="col-xs-12">
-      <div class="invoice-title">
-        <h2>Invoice</h2><h3 class="pull-right">Order # 12345</h3>
+    <div class="col-xs-12">
+      <div class="header">
+        <div class="logo">
+          <img src="App_Themes/Ann/image/logo.png" />
+        </div>
+        <div class="company">
+          <p>68 Đường C12, P.13, Tân Bình, TP.HCM</p>
+          <p>0914.615.408 - 0918.567.409</p>
+        </div>
       </div>
-      <hr>
+      <hr />
+      <div class="title">
+        <h1>XÁC NHẬN ĐƠN HÀNG #{{ order?.id }}</h1>
+      </div>
+      <div class="note">
+        <p>- Lưu ý, hình ảnh sản phẩm có thể hiển thị không đúng màu.</p>
+        <p>- Quý khách vui lòng kiểm tra thuộc tính sản phẩm (Màu, Size).</p>
+        <p>- Nếu có sai sót, quý khách vui lòng thông báo cho nhân viên.</p>
+      </div>
+      <hr />
+      <!-- Tên khách hàng -->
       <div class="row">
-        <div class="col-xs-6">
-          <address>
-          <strong>Billed To:</strong><br>
-            John Smith<br>
-            1234 Main<br>
-            Apt. 4B<br>
-            Springfield, ST 54321
-          </address>
+        <div class="col-xs-4">
+          <strong>Khách hàng:</strong>
         </div>
-        <div class="col-xs-6 text-right">
-          <address>
-            <strong>Shipped To:</strong><br>
-            Jane Smith<br>
-            1234 Main<br>
-            Apt. 4B<br>
-            Springfield, ST 54321
-          </address>
+        <div class="col-xs-8">
+          {{ customer?.fullName }}
         </div>
       </div>
+      <!-- Số điện thoại khách hàng -->
       <div class="row">
-        <div class="col-xs-6">
-          <address>
-            <strong>Payment Method:</strong><br>
-            Visa ending **** 4242<br>
-            jsmith@email.com
-          </address>
+        <div class="col-xs-4">
+          <strong>Điện thoại:</strong>
         </div>
-        <div class="col-xs-6 text-right">
-          <address>
-            <strong>Order Date:</strong><br>
-            March 7, 2014<br><br>
-          </address>
+        <div class="col-xs-8">
+          {{ customer?.phone }}
         </div>
       </div>
+      <!-- Ngày tạo đơn hàng -->
+      <div class="row">
+        <div class="col-xs-4">
+          <strong>Khởi tạo:</strong>
+        </div>
+        <div class="col-xs-8">
+          {{ order?.createdDate | date : 'dd/MM/yyyy hh:mm' }}
+        </div>
+      </div>
+      <!-- Ngày hoàn tất đơn hàng -->
+      <div class="row">
+        <div class="col-xs-4">
+          <strong>Hoàn tất:</strong>
+        </div>
+        <div class="col-xs-8">
+          {{ order?.dateDone | date : 'dd/MM/yyyy hh:mm' }}
+        </div>
+      </div>
+      <!-- Tên nhân viên phụ trách -->
+      <div class="row">
+        <div class="col-xs-4">
+          <strong>Nhân viên:</strong>
+        </div>
+        <div class="col-xs-8">
+          {{ order?.staffName }}
+        </div>
+      </div>
+      <hr />
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title"><strong>Order summary</strong></h3>
+        <div class="search" #search [class.sticky]="isSticky">
+          <form class="search__form" onsubmit="return false">
+            <input #inputSearch class="search__input" name="search" placeholder="Tìm sản phẩm" aria-label="Site search"
+              type="text" autocomplete="off" (keydown.enter)="searchProduct(inputSearch.value)" tabindex="1">
+            <button class="search__button" type="button" (click)="searchProduct(inputSearch.value)" tabindex="2">
+              <app-icon name="search-20" size="20"></app-icon>
+            </button>
+            <div class="search__border"></div>
+          </form>
         </div>
+
+        <div class="panel-heading">
+          <h3 class="panel-title"><strong>Chi tiết đơn hàng</strong></h3>
+        </div>
+
         <div class="panel-body">
           <div class="table-responsive">
             <table class="table table-condensed">
               <thead>
-                              <tr>
-                    <td><strong>Item</strong></td>
-                    <td class="text-center"><strong>Price</strong></td>
-                    <td class="text-center"><strong>Quantity</strong></td>
-                    <td class="text-right"><strong>Totals</strong></td>
-                              </tr>
+                <tr>
+                  <th rowspan="2" class="index"><strong>#</strong></th>
+                  <th class="image"><strong>Hình ảnh</strong></th>
+                  <th colspan="2" class="sku-tile"><strong>Mã -Tên sản phẩm</strong></th>
+                </tr>
+                <tr>
+                  <th class="price"><strong>Giá</strong></th>
+                  <th class="quantiy"><strong>Số lượng</strong></th>
+                  <th class="total-price"><strong>Tổng</strong></th>
+                </tr>
               </thead>
               <tbody>
-                <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                <!-- Thể hiện thông tin sản phẩm đã mua -->
+                <ng-template *ngIf="!isLoading; else loading" ngFor let-item [ngForOf]="orderItems" let-i="index">
+                  <tr #orderItem [attr.data-sku]="item.product.sku">
+                    <td rowspan="2" class="index">{{ i  + 1 }}</td>
+                    <td class="image">
+                      <img *ngIf="item.product.avatar" defaultImage="App_Themes/Ann/image/placeholder.png"
+                        [lazyLoad]="'uploads/images/85x113/' + item.product.avatar" [offset]="100">
+                    </td>
+                    <td colspan="3" class="sku-tile">{{ item.product.sku }} - {{ item.product.title }}</td>
+                  </tr>
+                  <tr>
+                    <td class="price">{{ item.price }}</td>
+                    <td class="quantiy">{{ item.quantity }}</td>
+                    <td class="total-price">{{ item.totalPrice }}</td>
+                  </tr>
+                </ng-template>
+
+                <ng-template #loading>
+                  <tr>
+                    <td class="text-center" colspan="4">
+                      <h4>Dữ liệu đang được loading ...</h4>
+                    </td>
+                  </tr>
+                </ng-template>
+                <!-- Kết thúc: Thể hiện thông tin sản phẩm đã mua -->
+
+                <!-- Bắt đâu: Tổng kết của đơn hàng -->
+                <!-- Số lượng đã mua -->
                 <tr>
-                  <td>BS-200</td>
-                  <td class="text-center">$10.99</td>
-                  <td class="text-center">1</td>
-                  <td class="text-right">$10.99</td>
+                  <td colspan="3" class="thick-line text-right">Số lượng</td>
+                  <td class="thick-line text-right">{{ order?.quantity | number }}</td>
                 </tr>
-                              <tr>
-                    <td>BS-400</td>
-                  <td class="text-center">$20.00</td>
-                  <td class="text-center">3</td>
-                  <td class="text-right">$60.00</td>
-                </tr>
-                              <tr>
-                      <td>BS-1000</td>
-                  <td class="text-center">$600.00</td>
-                  <td class="text-center">1</td>
-                  <td class="text-right">$600.00</td>
-                </tr>
+                <!-- Thành tiền -->
                 <tr>
-                  <td class="thick-line"></td>
-                  <td class="thick-line"></td>
-                  <td class="thick-line text-center"><strong>Subtotal</strong></td>
-                  <td class="thick-line text-right">$670.99</td>
+                  <td colspan="3" class="no-line text-right">Thành tiền</td>
+                  <td class="no-line text-right">{{ order?.priceNotDiscount | number }}</td>
                 </tr>
+
+                <!-- Bắt đâu: Thể hiện thông tin triết khấu của đơn hàng -->
+                <ng-template [ngIf]="haveDiscount">
+                  <tr>
+                    <td colspan="3" class="no-line text-right">Chiết khấu mỗi cái</td>
+                    <td class="no-line text-right">{{ order?.discountPerItem | number }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="no-line text-right">Trừ chiết khấu</td>
+                    <td class="no-line text-right">{{ order?.discount | number }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="no-line text-right">Sau khi triết khấu</td>
+                    <td class="no-line text-right">{{ order?.priceDiscount | number }}</td>
+                  </tr>
+                </ng-template>
+                <!-- Kết thúc: Thể hiện thông tin triết khấu của đơn hàng -->
+
+                <!-- Bắt đầu: Thể hiện thông tin đơn hàng đổi trả -->
+                <ng-template [ngIf]="haveRefund">
+                  <tr>
+                    <td colspan="3" class="no-line text-right">Trừ tiền hàng trả (đơn {{ order?.refund?.id }})</td>
+                    <td class="no-line text-right">{{ order?.refund?.refundMoney | number }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="no-line text-right">Tổng tiền còn lại</td>
+                    <td class="no-line text-right">{{ order?.remainderMoney | number }}</td>
+                  </tr>
+                </ng-template>
+                <!-- Kết thúc: Thể hiện thông tin đơn hàng đổi trả -->
+
+                <!-- Tiền phí vận chuyển -->
+                <tr *ngIf="haveShipping">
+                  <td colspan="3" class="no-line text-right">Phí vận chuyển</td>
+                  <td class="no-line text-right">{{ order?.feeShipping | number }}</td>
+                </tr>
+
+                <!-- Bắt đầu: Thể hiện thông tin các loại phí khác -->
+                <ng-template ngFor let-fee [ngForOf]="order?.feeOthers">
+                  <tr *ngIf="fee?.feePrice !== 0">
+                    <td colspan="3" class="no-line text-right">{{ fee?.feeName }}</td>
+                    <td class="no-line text-right">{{ fee?.feePrice | number }}</td>
+                  </tr>
+                </ng-template>
+                <!-- Kết thúc: Thể hiện thông tin các loại phí khác -->
+
+                <!-- Tổng tiền của đơn hàng -->
                 <tr>
-                  <td class="no-line"></td>
-                  <td class="no-line"></td>
-                  <td class="no-line text-center"><strong>Shipping</strong></td>
-                  <td class="no-line text-right">$15</td>
+                  <td colspan="3" class="no-line text-right"><strong>Tổng cộng</strong></td>
+                  <td class="no-line text-right">{{ order?.price | number }}</td>
                 </tr>
-                <tr>
-                  <td class="no-line"></td>
-                  <td class="no-line"></td>
-                  <td class="no-line text-center"><strong>Total</strong></td>
-                  <td class="no-line text-right">$685.99</td>
-                </tr>
+                <!-- Kết thúc: Tổng kết của đơn hàng -->
               </tbody>
             </table>
           </div>
