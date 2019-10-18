@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // modules (third-party)
 import { ToastrModule } from 'ngx-toastr';
+import { LazyLoadImageModule, intersectionObserverPreset  } from 'ng-lazyload-image';
 
 // modules
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +23,7 @@ import { RootComponent } from './components/root/root.component';
 
 // pages
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -37,9 +39,11 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
         BrowserModule.withServerTransition({ appId: 'serverApp' }),
         BrowserAnimationsModule,
         ReactiveFormsModule,
+        HttpClientModule,
         FormsModule,
         // modules (third-party)
         ToastrModule.forRoot(),
+        LazyLoadImageModule.forRoot({ preset: intersectionObserverPreset }),
         // modules
         AppRoutingModule,
         SharedModule,

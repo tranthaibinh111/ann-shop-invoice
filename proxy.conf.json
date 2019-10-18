@@ -1,0 +1,20 @@
+{
+  "/api/v1/*": {
+    "target": "http://ann-shop-server.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/uploads/images/*": {
+    "target": "http://hethongann.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/App_Themes/Ann/image/*": {
+    "target": "http://hethongann.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

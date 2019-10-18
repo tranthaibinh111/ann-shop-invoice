@@ -8,10 +8,10 @@ export function makeRoutes(): Routes {
     {
       path: '',
       pathMatch: 'full',
-      redirectTo: 'invoice'
+      redirectTo: 'hoa-don'
     },
     {
-      path: 'invoice',
+      path: 'hoa-don',
       loadChildren: './modules/invoice/invoice.module#InvoiceModule'
     },
     {
@@ -29,10 +29,6 @@ const routes: Routes = [
       headerLayout: 'compact'
     },
     children: makeRoutes()
-  },
-  {
-    path: '**',
-    redirectTo: 'compact'
   }
 ];
 

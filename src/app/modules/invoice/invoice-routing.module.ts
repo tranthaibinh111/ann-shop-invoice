@@ -7,10 +7,10 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'khach-hang'
+    redirectTo: '0/khach-hang/0'
   },
   {
-    path: 'khach-hang',
+    path: ':orderID/khach-hang/:customerID',
     component: InvoiceCustomerComponent,
   },
 ];
