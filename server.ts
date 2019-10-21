@@ -6,6 +6,7 @@ import {ngExpressEngine} from '@nguniversal/express-engine';
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 
 import * as express from 'express';
+import * as proxy from 'http-proxy-middleware'
 import {join} from 'path';
 
 // https://www.pika.dev/packages/ngx-owl-carousel-o
@@ -22,6 +23,16 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
+
+// https://github.com/chimurai/http-proxy-middleware
+// Add middleware for http proxying
+const apiProxy = proxy({ target: 'http://ann-shop-server.com', changeOrigin: true });
+const imageProxy = proxy({ target: 'http://hethongann.com', changeOrigin: true });
+const noImageapiProxy = proxy({ target: 'http://hethongann.com', changeOrigin: true });
+
+app.use('/api/v1', apiProxy);
+app.use('/uploads/images', imageProxy);
+app.use('/App_Themes/Ann/image', noImageapiProxy);
 
 // https://www.pika.dev/packages/ngx-owl-carousel-o
 // -----------------------------------------------------------------------------------

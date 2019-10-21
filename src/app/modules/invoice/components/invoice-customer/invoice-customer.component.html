@@ -114,9 +114,9 @@
                     <td colspan="3" class="sku-tile">{{ item.product.sku }} - {{ item.product.title }}</td>
                   </tr>
                   <tr>
-                    <td class="price">{{ item.price }}</td>
-                    <td class="quantiy">{{ item.quantity }}</td>
-                    <td class="total-price">{{ item.totalPrice }}</td>
+                    <td class="price">{{ item.price | number }}</td>
+                    <td class="quantiy">{{ item.quantity | number }}</td>
+                    <td class="total-price">{{ item.totalPrice | number }}</td>
                   </tr>
                 </ng-template>
 
