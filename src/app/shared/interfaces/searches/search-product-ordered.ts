@@ -1,11 +1,7 @@
-export interface SearchProductOrderd {
-  productID: number;
-  productVariableID: number;
-  sku: string;
-  title: string;
-  avatar: string;
-  color: string;
-  size: string;
+import { Product } from '../common/product';
+
+
+export interface SearchProductOrderd extends Product {
   price: number;
   createdDate: Date;
 }

@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 // ANN Shop
-import { Order } from '../../interfaces/pages/invoice-customer/order';
-import { OrderItem } from '../../interfaces/pages/invoice-customer/order-item';
+import { Order } from '../../interfaces/common/order';
+import { OrderItem } from '../../interfaces/common/order-item';
 import { Subject, Observable } from 'rxjs';
 
 

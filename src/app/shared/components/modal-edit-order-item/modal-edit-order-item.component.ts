@@ -8,8 +8,9 @@ import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 // ANN Shop
-import { Order } from '../../interfaces/pages/invoice-customer/order';
-import { OrderItem } from '../../interfaces/pages/invoice-customer/order-item';
+import { Order } from '../../interfaces/common/order';
+import { OrderItemInput } from '../../interfaces/common/order-item-input';
+import { OrderItem } from '../../interfaces/common/order-item';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class ModalEditOrderItemComponent implements OnInit, OnDestroy{
   public readonly item$: Observable<OrderItem>;
 
   public orderID: Order;
-  public item: OrderItem;
+  public item: OrderItemInput;
 
   constructor(private bsModalRef: BsModalRef) {
     this.destroy$ = new Subject();

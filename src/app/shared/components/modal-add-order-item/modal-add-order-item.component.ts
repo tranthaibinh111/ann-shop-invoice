@@ -13,8 +13,9 @@ import { tap, switchMap, takeUntil, map } from 'rxjs/operators';
 // ANN Shop
 import { SearchProductOrderd } from '../../interfaces/searches/search-product-ordered';
 import { SearchProductOrderService } from '../../services/searches/search-product-order.service';
-import { Order } from '../../interfaces/pages/invoice-customer/order';
-import { OrderItem } from '../../interfaces/pages/invoice-customer/order-item';
+import { Order } from '../../interfaces/common/order';
+import { OrderItemInput } from '../../interfaces/common/order-item-input';
+import { OrderItem } from '../../interfaces/common/order-item';
 
 @Component({
   selector: 'app-modal-add-order-item',
@@ -35,7 +36,7 @@ export class ModalAddOrderItemComponent implements OnDestroy {
   public order: Order;
   public orderItemOlds: OrderItem[];
   // Các sản phẩm đặt hàng mới
-  public orderItems: OrderItem[];
+  public orderItems: OrderItemInput[];
   private orderItemsSubject$: Subject<OrderItem[]>;
   public readonly orderItems$: Observable<OrderItem[]>;
 
@@ -108,11 +109,11 @@ export class ModalAddOrderItemComponent implements OnDestroy {
 
     this.orderItems
       .filter(
-        (item: OrderItem) =>
+        (item: OrderItemInput) =>
           (item.product.productID === productOrdered.productID) &&
           (item.product.productVariableID === productOrdered.productVariableID)
       )
-      .map((item: OrderItem) => {
+      .map((item: OrderItemInput) => {
         let value: number = item.quantityControl.value;
         item.quantityControl.setValue(++value);
         isOrderItemNew = false;
@@ -120,7 +121,7 @@ export class ModalAddOrderItemComponent implements OnDestroy {
 
     if (isOrderItemNew) {
       // Xử lý thêm sản phẩm cần mua
-      let orderItemNew: OrderItem = {
+      let orderItemNew: OrderItemInput = {
         id: null,
         product: productOrdered,
         quantity: 1,
@@ -137,7 +138,9 @@ export class ModalAddOrderItemComponent implements OnDestroy {
   get disabledConfirm(): boolean {
     let index: number = this.orderItems
       .findIndex(
-        (item: OrderItem) => (item.quantityControl.errors && item.quantityControl.errors.required) || item.quantityControl.value < 1
+        (item: OrderItemInput) =>
+          (item.quantityControl.errors && item.quantityControl.errors.required) ||
+          item.quantityControl.value < 1
       );
 
     return index === -1 ? false : true
@@ -145,7 +148,7 @@ export class ModalAddOrderItemComponent implements OnDestroy {
 
   confirm() {
     this.orderItems.map(
-      (item: OrderItem) => {
+      (item: OrderItemInput) => {
         item.quantity = item.quantityControl.value;
         item.totalPrice = item.price * item.quantity;
       }

@@ -8,9 +8,9 @@ import { map, catchError } from 'rxjs/operators';
 
 // ANN Shop
 import { environment } from 'src/environments/environment';
-import { Customer } from '../../interfaces/pages/invoice-customer/customer';
-import { Order } from '../../interfaces/pages/invoice-customer/order';
-import { OrderItem } from '../../interfaces/pages/invoice-customer/order-item';
+import { Customer } from '../../interfaces/common/customer';
+import { Order } from '../../interfaces/common/order';
+import { OrderItem } from '../../interfaces/common/order-item';
 
 
 @Injectable({
