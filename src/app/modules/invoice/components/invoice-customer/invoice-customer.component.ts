@@ -21,9 +21,9 @@ import { ModalAddOrderItemComponent } from 'src/app/shared/components/modal-add-
 import { ModalEditOrderItemComponent } from 'src/app/shared/components/modal-edit-order-item/modal-edit-order-item.component';
 import { ModalRemoveOrderItemComponent } from 'src/app/shared/components/modal-remove-order-item/modal-remove-order-item.component';
 // Interface
-import { Customer } from 'src/app/shared/interfaces/pages/invoice-customer/customer';
-import { Order } from 'src/app/shared/interfaces/pages/invoice-customer/order';
-import { OrderItem } from 'src/app/shared/interfaces/pages/invoice-customer/order-item';
+import { Customer } from 'src/app/shared/interfaces/common/customer';
+import { Order } from 'src/app/shared/interfaces/common/order';
+import { OrderItem } from 'src/app/shared/interfaces/common/order-item';
 // Service
 import { LoadingSpinnerService } from 'src/app/shared/services/loading-spinner.service';
 import { InvoiceCustomerService } from 'src/app/shared/services/pages/invoice-customer.service';
