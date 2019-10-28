@@ -1,3 +1,20 @@
 // -------------------------
 // --- You can add your custom CSS here and it will overwrite template styles.
 // -------------------------
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  app-icon {
+    float: left;
+  }
+  span {
+    float: right;
+  }
+
+  >:first-child {
+    margin-right: 10px;
+  }
+}

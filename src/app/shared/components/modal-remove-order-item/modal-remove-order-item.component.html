@@ -1,0 +1,65 @@
+<div class="modal-header bg-danger">
+  <app-icon name="rubbish-bin-32" size="32"></app-icon>
+  <h4 class="modal-title pull-left">Xóa</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="decline()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body text-center">
+  <p>Bạn có muốn bỏ sản phẩm này phải không?</p>
+
+  <!-- Thông tin -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="image">Hình ảnh</th>
+        <th colspan="2" class="sku-tile">SKU - Sản phẩm</th>
+      </tr>
+      <tr>
+        <th class="price">Giá</th>
+        <th class="quantiy">Số lượng</th>
+        <th class="total-price">Tổng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Thể hiền thông tin sản phẩm -->
+      <tr>
+        <!-- Hình sản phẩm -->
+        <td class="image">
+          <img *ngIf="item.product.avatar" defaultImage="App_Themes/Ann/image/placeholder.png"
+            [lazyLoad]="'uploads/images/85x113/' + item.product.avatar" [offset]="100">
+        </td>
+        <!-- Mã sản phẩm - Tên sản phẩm -->
+        <td colspan="2" class="sku-tile">
+          {{ item?.product?.sku }} - {{ item?.product?.title }}
+          <ng-template [ngIf]="item.product.color || item.product.size">
+            <br />
+            <div class="attribute">
+              <span class="text-danger" *ngIf="item.product.color">
+                Màu: {{ item.product.color }}.
+              </span>
+              <span class="text-danger" *ngIf="item.product.size">
+                Size: {{ item.product.size }}.
+              </span>
+            </div>
+          </ng-template>
+        </td>
+      </tr>
+      <!-- Thể hiện thông tin mua hàng -->
+      <tr>
+        <td class="price">{{ item.price | number }}</td>
+        <td class="quantiy">{{ item.quantity | number }}</td>
+        <td class="total-price">{{ item.totalPrice | number }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary btn-icon" (click)="confirm()">
+    <app-icon name="ok-mark-24" size="24"></app-icon><span>Đồng ý</span>
+  </button>
+  <button type="button" class="btn btn-primary btn-icon" (click)="decline()">
+    <app-icon name="error-24" size="24"></app-icon><span>Không</span>
+  </button>
+</div>

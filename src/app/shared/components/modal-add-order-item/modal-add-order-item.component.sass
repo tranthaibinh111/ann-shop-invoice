@@ -1,0 +1,76 @@
+$breakpoints: (xs-end: 575px)
+$backgroud-color: #b3cde0
+
+// Bootstrap
+.table
+  & > thead
+    background-color: $backgroud-color
+    & > tr
+      & > .no-line
+        border-bottom: none
+
+  & > tbody
+    & > tr
+      & > .no-line
+        border-top: none
+      & > .thick-line
+        border-top: 2px solid
+
+// ANN Shop
+.modal-header
+  align-items: center
+  & >:first-child
+    margin-right: 10px
+
+.search-product-ordered
+  width: auto
+  .product-ordered
+    padding: 0 10px
+    &:hover
+      cursor: pointer
+      background-color: #FFDC00
+    tbody
+      .image
+        margin-right: 10px
+        img
+          width: 63.75px
+          height: 84.75px
+      .sku-title
+        padding-left: 5px
+      .color-size
+        padding-left: 5px
+      .price
+        padding-left: 5px
+
+
+table
+  & > thead
+    & > tr
+      .image, .sku-tile
+        text-align: center
+      .price, .quantiy, .total-price
+        width: 30%
+        text-align: center
+
+  & > tbody
+    & > tr
+      .image
+        text-align: center
+        vertical-align: middle
+        img
+          max-width: 85px
+          max-height: 113px
+      .sku-tile
+        text-align: left
+      .quantiy
+        text-align: center
+      .price, .total-price
+        text-align: right
+
+@media ( max-width:  map-get($breakpoints, xs-end))
+  table
+    & > tbody
+      & > tr
+        .sku-tile
+          .attribute
+            display: grid

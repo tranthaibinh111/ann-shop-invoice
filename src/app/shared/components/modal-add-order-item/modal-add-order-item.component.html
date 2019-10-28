@@ -1,0 +1,120 @@
+<div class="modal-header bg-success">
+  <app-icon name="add-to-cart-32" size="32"></app-icon>
+  <h4 class="modal-title pull-left">Thêm sản phẩm</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="decline()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <div class="search-product-ordered">
+      <ng-autocomplete [isLoading]="searchLoading" [data]="searchResult$ | async" (inputChanged)='onChangeSearch($event)'
+        (selected)='selectEvent($event)' searchKeyword="sku" placeHolder="Nhập sản phẩm muốn thêm vào"
+        [itemTemplate]="itemTemplateStatic" historyHeading="Sản phẩm gần đây" historyIdentifier="searchResultList"
+        historyListMaxNumber="3" notFoundText="Không tìm thấy sản phẩm" [notFoundTemplate]="notFoundTemplate">
+      </ng-autocomplete>
+
+      <ng-template #itemTemplateStatic let-item>
+        <div class="product-ordered">
+          <tbody>
+            <tr>
+              <td [attr.rowspan]="item.color || item.size ? '3' : '2'" class="image">
+                <img *ngIf="item.avatar" defaultImage="App_Themes/Ann/image/placeholder.png"
+                  [lazyLoad]="'uploads/images/85x113/' + item.avatar" [offset]="100">
+              </td>
+              <td class="sku-title">
+                <small [innerHTML]="item.sku + ' - ' + item.title"></small>
+              </td>
+            </tr>
+            <tr *ngIf="item.color || item.size">
+              <td class="color-size">
+                <small class="text-danger" *ngIf="item.color">
+                  Màu: {{ item.color }}.
+                </small>
+                <small class="text-danger" *ngIf="item.size">
+                  Size: {{ item.size }}.
+                </small>
+              </td>
+            </tr>
+            <tr>
+              <td class="price">
+                <small>Giá: {{item.price | number}}</small>
+              </td>
+            </tr>
+          </tbody>
+        </div>
+      </ng-template>
+
+      <ng-template #notFoundTemplate let-notFound>
+        <div [innerHTML]="notFound"></div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Thông tin -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="image">Hình ảnh</th>
+        <th colspan="2" class="sku-tile">SKU - Sản phẩm</th>
+      </tr>
+      <tr>
+        <th class="price">Giá</th>
+        <th class="quantiy">Số lượng</th>
+        <th class="total-price">Tổng</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Thể hiền thông tin sản phẩm -->
+      <ng-template *ngIf="orderItems.length > 0" ngFor let-item [ngForOf]="orderItems">
+
+        <tr>
+          <!-- Hình sản phẩm -->
+          <td class="image">
+            <img *ngIf="item.product.avatar" defaultImage="App_Themes/Ann/image/placeholder.png"
+              [lazyLoad]="'uploads/images/85x113/' + item.product.avatar" [offset]="100">
+          </td>
+          <!-- Mã sản phẩm - Tên sản phẩm -->
+          <td colspan="2" class="sku-tile">
+            {{ item?.product?.sku }} - {{ item?.product?.title }}
+            <ng-template [ngIf]="item.product.color || item.product.size">
+              <br />
+              <div class="attribute">
+                <span class="text-danger" *ngIf="item.product.color">
+                  Màu: {{ item.product.color }}.
+                </span>
+                <span class="text-danger" *ngIf="item.product.size">
+                  Size: {{ item.product.size }}.
+                </span>
+              </div>
+            </ng-template>
+          </td>
+        </tr>
+        <!-- Thể hiện thông tin mua hàng -->
+        <tr>
+          <td class="price">{{ item.price | number }}</td>
+          <td class="quantiy">
+            <app-input-number *ngIf="item.quantityControl" [formControl]="item.quantityControl" [min]="1">
+            </app-input-number>
+          </td>
+          <td class="total-price">{{ item.quantityControl?.value * item.price | number }}</td>
+        </tr>
+      </ng-template>
+      <ng-template *ngIf="orderItems.length === 0">
+        <tr>
+          <td class="text-center" colspan="3">Hãy nhập sản phẩm cần thêm!</td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+  <p class="text-center text-danger" *ngIf="disabledConfirm">
+    Vui lòng nhập số lượng lớn hơn 0
+  </p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary btn-icon" (click)="confirm()" [disabled]="disabledConfirm">
+    <app-icon name="ok-mark-24" size="24"></app-icon><span>Đồng ý</span>
+  </button>
+  <button type="button" class="btn btn-primary btn-icon" (click)="decline()">
+    <app-icon name="error-24" size="24"></app-icon><span>Không</span>
+  </button>

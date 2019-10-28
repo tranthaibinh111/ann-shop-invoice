@@ -94,7 +94,7 @@
                 <tr>
                   <th rowspan="2" class="index"><strong>#</strong></th>
                   <th class="image"><strong>Hình ảnh</strong></th>
-                  <th colspan="2" class="sku-tile"><strong>Mã -Tên sản phẩm</strong></th>
+                  <th colspan="2" class="sku-tile"><strong>Mã -Sản phẩm</strong></th>
                 </tr>
                 <tr>
                   <th class="price"><strong>Giá</strong></th>
@@ -104,14 +104,37 @@
               </thead>
               <tbody>
                 <!-- Thể hiện thông tin sản phẩm đã mua -->
-                <ng-template *ngIf="!isLoading; else loading" ngFor let-item [ngForOf]="orderItems" let-i="index">
+                <ng-template ngFor let-item [ngForOf]="orderItems" let-i="index">
                   <tr #orderItem [attr.data-sku]="item.product.sku">
                     <td rowspan="2" class="index">{{ i  + 1 }}</td>
                     <td class="image">
                       <img *ngIf="item.product.avatar" defaultImage="App_Themes/Ann/image/placeholder.png"
                         [lazyLoad]="'uploads/images/85x113/' + item.product.avatar" [offset]="100">
                     </td>
-                    <td colspan="3" class="sku-tile">{{ item.product.sku }} - {{ item.product.title }}</td>
+                    <td colspan="3" class="sku-tile">
+                      <div class="content">
+                        {{ item.product.sku }} - {{ item.product.title }}
+                        <ng-template [ngIf]="item.product.color || item.product.size">
+                          <br />
+                          <div class="attribute">
+                            <span class="text-danger" *ngIf="item.product.color">
+                              Màu: {{ item.product.color }}.
+                            </span>
+                            <span class="text-danger" *ngIf="item.product.size">
+                              Size: {{ item.product.size }}.
+                            </span>
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="actions">
+                        <button class="btn btn-danger btn-icon float-left" type="button" (click)="removeOrderItem(item)">
+                          <app-icon name="rubbish-bin-16" size="16"></app-icon><span>Xóa</span>
+                        </button>
+                        <button class="btn btn-primary btn-icon float-right" type="button" (click)="editOrderItem(item)">
+                          <app-icon name="writing-16" size="16"></app-icon><span>Sửa</span>
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td class="price">{{ item.price | number }}</td>
@@ -119,16 +142,15 @@
                     <td class="total-price">{{ item.totalPrice | number }}</td>
                   </tr>
                 </ng-template>
-
-                <ng-template #loading>
-                  <tr>
-                    <td class="text-center" colspan="4">
-                      <h4>Dữ liệu đang được loading ...</h4>
-                    </td>
-                  </tr>
-                </ng-template>
                 <!-- Kết thúc: Thể hiện thông tin sản phẩm đã mua -->
 
+                <tr>
+                  <td colspan="4">
+                    <button type="button" class="btn btn-success btn-block btn-icon btn-add-order-item" (click)="addOrderItem()">
+                        <app-icon name="add-to-cart-24" size="24"></app-icon><span>Thêm sản phẩm</span>
+                    </button>
+                  </td>
+                </tr>
                 <!-- Bắt đâu: Tổng kết của đơn hàng -->
                 <!-- Số lượng đã mua -->
                 <tr>

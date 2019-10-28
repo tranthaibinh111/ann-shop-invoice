@@ -1,0 +1,21 @@
+<div class="spinner-wrapper" *ngIf="!(hide | async)">
+  <div class="container">
+    <div class="row">
+      <div id="loader">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="loading"></div>
+      </div>
+
+      <p class="spinner-message" *ngIf="message | async">
+        {{message | async}}
+      </p>
+    </div>
+  </div>
+</div>
