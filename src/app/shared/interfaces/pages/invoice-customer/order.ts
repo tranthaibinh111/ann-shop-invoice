@@ -3,6 +3,7 @@ import { FeeOther } from './fee-other';
 
 export interface Order {
   id: number,
+  kind: number,
   createdDate: Date,
   dateDone: Date | null,
   staffName: string,

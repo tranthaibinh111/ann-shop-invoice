@@ -1,5 +1,5 @@
 // breakpoints
-$breakpoints: (lg-start: 992px, xl-start: 1200px)
+$breakpoints: (xs-end: 575px, lg-start: 992px, xl-start: 1200px)
 
 $backgroud-color: #b3cde0
 
@@ -37,15 +37,16 @@ $backgroud-color: #b3cde0
 // ANN Shop
 .header
   display: flex
+  padding-top: 10px
   & > .logo
     min-width: 80px
     max-width: 200px
-    max-height: 100px
+    max-height: 130px
     & > img
       width: 100%
       height: 100%
   & > .company
-    max-height: 100px
+    max-height: 130px
     width: 83.3%
     padding-left: 2%
 
@@ -87,21 +88,43 @@ table
         vertical-align: middle
       .image
         text-align: center
+        vertical-align: middle
         img
           max-width: 85px
+          max-height: 113px
       .sku-tile
         text-align: left
+        .content
+          min-height: 65px
+          height: 100%
+        .actions
+          padding-top: 10px
+          height: 100%
       .quantiy
         text-align: center
       .price, .total-price
         text-align: right
+      & > td
+          .btn-add-order-item
+            padding-left: 40%
 
 .title
   text-align: center
   h1
     display: inline-block
 
-@each $name, $size in $breakpoints
-  @media ( min-width:  $size)
-    .container
-      max-width: 720px
+@media ( min-width:  map-get($breakpoints, lg-start)) and ( min-width:  map-get($breakpoints, xl-start))
+  .container
+    max-width: 720px
+
+@media ( max-width:  map-get($breakpoints, xs-end))
+  table
+    & > tbody
+      & > tr
+        .sku-tile
+          .content
+            .attribute
+              display: grid
+        & > td
+          .btn-add-order-item
+            padding-left: 25%
