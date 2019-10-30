@@ -7,61 +7,61 @@
         </div>
         <div class="company">
           <p>68 Đường C12, P.13, Tân Bình, TP.HCM</p>
-          <p>0914.615.408 - 0918.567.409</p>
+          <p>Hotline/Zalo: <a href="https://zalo.me/{{ getHotLine(order?.staffName) }}" target="_blank">{{ getHotLine(order?.staffName) }}</a></p>
         </div>
       </div>
       <hr />
       <div class="title">
-        <h1>XÁC NHẬN ĐƠN HÀNG #{{ order?.id }}</h1>
+        <h1>ĐƠN HÀNG #{{ order?.id }}</h1>
       </div>
       <div class="note">
-        <p>- Lưu ý, hình ảnh sản phẩm có thể hiển thị không đúng màu.</p>
-        <p>- Quý khách vui lòng kiểm tra thuộc tính sản phẩm (Màu, Size).</p>
-        <p>- Nếu có sai sót, quý khách vui lòng thông báo cho nhân viên.</p>
+        <p>- Hình sản phẩm có thể hiển thị không đúng màu.</p>
+        <p>- Vui lòng kiểm tra màu, size sản phẩm nếu có.</p>
+        <p>- Nếu có sai sót, vui lòng thông báo cho nhân viên.</p>
       </div>
       <hr />
       <!-- Tên khách hàng -->
-      <div class="row">
-        <div class="col-xs-4">
+      <div class="row padding-bottom-10px">
+        <div class="col-xs-5">
           <strong>Khách hàng:</strong>
         </div>
-        <div class="col-xs-8">
+        <div class="col-xs-7">
           {{ customer?.fullName }}
         </div>
       </div>
       <!-- Số điện thoại khách hàng -->
-      <div class="row">
-        <div class="col-xs-4">
+      <div class="row padding-bottom-10px">
+        <div class="col-xs-5">
           <strong>Điện thoại:</strong>
         </div>
-        <div class="col-xs-8">
+        <div class="col-xs-7">
           {{ customer?.phone }}
         </div>
       </div>
       <!-- Ngày tạo đơn hàng -->
-      <div class="row">
-        <div class="col-xs-4">
-          <strong>Khởi tạo:</strong>
+      <div class="row padding-bottom-10px">
+        <div class="col-xs-5">
+          <strong>Ngày tạo:</strong>
         </div>
-        <div class="col-xs-8">
+        <div class="col-xs-7">
           {{ order?.createdDate | date : 'dd/MM/yyyy hh:mm' }}
         </div>
       </div>
       <!-- Ngày hoàn tất đơn hàng -->
-      <div class="row">
-        <div class="col-xs-4">
+      <div *ngIf="order?.dateDone" class="row padding-bottom-10px">
+        <div class="col-xs-5">
           <strong>Hoàn tất:</strong>
         </div>
-        <div class="col-xs-8">
+        <div class="col-xs-5">
           {{ order?.dateDone | date : 'dd/MM/yyyy hh:mm' }}
         </div>
       </div>
       <!-- Tên nhân viên phụ trách -->
-      <div class="row">
-        <div class="col-xs-4">
+      <div class="row padding-bottom-10px">
+        <div class="col-xs-5">
           <strong>Nhân viên:</strong>
         </div>
-        <div class="col-xs-8">
+        <div class="col-xs-7">
           {{ order?.staffName }}
         </div>
       </div>
@@ -70,11 +70,11 @@
   </div>
 
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12 no-padding">
       <div class="panel panel-default">
         <div class="search" #search [class.sticky]="isSticky">
           <form class="search__form" onsubmit="return false">
-            <input #inputSearch class="search__input" name="search" placeholder="Tìm sản phẩm" aria-label="Site search"
+            <input #inputSearch class="search__input" name="search" placeholder="Tìm sản phẩm (nhập mã)" aria-label="Site search"
               type="text" autocomplete="off" (keydown.enter)="searchProduct(inputSearch.value)" tabindex="1">
             <button class="search__button" type="button" (click)="searchProduct(inputSearch.value)" tabindex="2">
               <app-icon name="search-20" size="20"></app-icon>
@@ -82,38 +82,31 @@
             <div class="search__border"></div>
           </form>
         </div>
-
-        <div class="panel-heading">
-          <h3 class="panel-title"><strong>Chi tiết đơn hàng</strong></h3>
-        </div>
-
         <div class="panel-body">
           <div class="table-responsive">
             <table class="table table-condensed">
               <thead>
                 <tr>
-                  <th rowspan="2" class="index"><strong>#</strong></th>
-                  <th class="image"><strong>Hình ảnh</strong></th>
-                  <th colspan="2" class="sku-tile"><strong>Mã -Sản phẩm</strong></th>
-                </tr>
-                <tr>
-                  <th class="price"><strong>Giá</strong></th>
-                  <th class="quantiy"><strong>Số lượng</strong></th>
-                  <th class="total-price"><strong>Tổng</strong></th>
+                  <th class="index">#</th>
+                  <th class="price">Giá</th>
+                  <th class="quantiy">Số lượng</th>
+                  <th class="total-price">Tổng</th>
                 </tr>
               </thead>
               <tbody>
                 <!-- Thể hiện thông tin sản phẩm đã mua -->
                 <ng-template ngFor let-item [ngForOf]="orderItems" let-i="index">
-                  <tr #orderItem [attr.data-sku]="item.product.sku">
+                  <tr #orderItem [attr.data-sku]="item.product.sku" [className]="i % 2 === 0 ? 'even-row' : 'odd-row'">
                     <td rowspan="2" class="index">{{ i  + 1 }}</td>
                     <td class="image">
-                      <img *ngIf="item.product.avatar" defaultImage="App_Themes/Ann/image/placeholder.png"
-                        [lazyLoad]="'uploads/images/85x113/' + item.product.avatar" [offset]="100">
+                      <a *ngIf="item.product.avatar" target="_blank" [href]="'uploads/images/' + item.product.avatar">
+                        <img *ngIf="item.product.avatar" defaultImage="App_Themes/Ann/image/placeholder.png"
+                          [lazyLoad]="'uploads/images/85x113/' + item.product.avatar" [offset]="100">
+                      </a>
                     </td>
                     <td colspan="3" class="sku-tile">
                       <div class="content">
-                        {{ item.product.sku }} - {{ item.product.title }}
+                        <strong>{{ item.product.sku }}</strong> - {{ item.product.title }}
                         <ng-template [ngIf]="item.product.color || item.product.size">
                           <br />
                           <div class="attribute">
@@ -126,17 +119,17 @@
                           </div>
                         </ng-template>
                       </div>
-                      <div class="actions">
+                      <!-- <div class="actions">
                         <button class="btn btn-danger btn-icon float-left" type="button" (click)="removeOrderItem(item)">
                           <app-icon name="rubbish-bin-16" size="16"></app-icon><span>Xóa</span>
                         </button>
                         <button class="btn btn-primary btn-icon float-right" type="button" (click)="editOrderItem(item)">
                           <app-icon name="writing-16" size="16"></app-icon><span>Sửa</span>
                         </button>
-                      </div>
+                      </div> -->
                     </td>
                   </tr>
-                  <tr>
+                  <tr [className]="i % 2 == 0 ? 'even-row' : 'odd-row'">
                     <td class="price">{{ item.price | number }}</td>
                     <td class="quantiy">{{ item.quantity | number }}</td>
                     <td class="total-price">{{ item.totalPrice | number }}</td>
@@ -144,13 +137,13 @@
                 </ng-template>
                 <!-- Kết thúc: Thể hiện thông tin sản phẩm đã mua -->
 
-                <tr>
+                <!-- <tr>
                   <td colspan="4">
                     <button type="button" class="btn btn-success btn-block btn-icon btn-add-order-item" (click)="addOrderItem()">
                         <app-icon name="add-to-cart-24" size="24"></app-icon><span>Thêm sản phẩm</span>
                     </button>
                   </td>
-                </tr>
+                </tr> -->
                 <!-- Bắt đâu: Tổng kết của đơn hàng -->
                 <!-- Số lượng đã mua -->
                 <tr>
@@ -167,14 +160,14 @@
                 <ng-template [ngIf]="haveDiscount">
                   <tr>
                     <td colspan="3" class="no-line text-right">Chiết khấu mỗi cái</td>
-                    <td class="no-line text-right">{{ order?.discountPerItem | number }}</td>
+                    <td class="no-line text-right">{{ order?.discountPerItem | number }}/cái</td>
                   </tr>
                   <tr>
-                    <td colspan="3" class="no-line text-right">Trừ chiết khấu</td>
+                    <td colspan="3" class="no-line text-right">Tổng chiết khấu</td>
                     <td class="no-line text-right">{{ order?.discount | number }}</td>
                   </tr>
                   <tr>
-                    <td colspan="3" class="no-line text-right">Sau khi triết khấu</td>
+                    <td colspan="3" class="no-line text-right">Sau khi chiết khấu</td>
                     <td class="no-line text-right">{{ order?.priceDiscount | number }}</td>
                   </tr>
                 </ng-template>
@@ -211,7 +204,7 @@
                 <!-- Tổng tiền của đơn hàng -->
                 <tr>
                   <td colspan="3" class="no-line text-right"><strong>Tổng cộng</strong></td>
-                  <td class="no-line text-right">{{ order?.price | number }}</td>
+                  <td class="no-line text-right"><strong>{{ order?.price | number }}</strong></td>
                 </tr>
                 <!-- Kết thúc: Tổng kết của đơn hàng -->
               </tbody>
