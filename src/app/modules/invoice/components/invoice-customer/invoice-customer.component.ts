@@ -10,6 +10,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 // modules (third-party)
 import { BsModalService, BsModalRef, ModalOptions } from 'ngx-bootstrap/modal';
@@ -54,6 +55,7 @@ export class InvoiceCustomerComponent implements AfterViewInit, OnInit {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
+    private titleService: Title,
     private modalService: BsModalService,
     private toastr: ToastrService,
     private loadingSpinner: LoadingSpinnerService,
@@ -81,7 +83,10 @@ export class InvoiceCustomerComponent implements AfterViewInit, OnInit {
             .subscribe(data => this.customer = data);
           // Thông tin đơn hàng
           this.service.getOrder(orderID, customerID)
-            .subscribe(data => this.order = data);
+            .subscribe(data => {
+              this.order = data;
+              this.titleService.setTitle(`Bill #${this.order.id} - ${this.customer ? this.customer.fullName : ''}`);
+            });
           // Thông tin các mon hàng đã mua
           this.service.getOrderItem(orderID, customerID)
             .subscribe(data => {
@@ -130,8 +135,9 @@ export class InvoiceCustomerComponent implements AfterViewInit, OnInit {
 
     this._trItems.forEach((item: ElementRef) => {
       let itemElement: HTMLElement = item.nativeElement;
+      let reg = new RegExp(`^${sku.toUpperCase().trim()}`, "g");
 
-      if (sku.trim() === itemElement.getAttribute('data-sku')) {
+      if (reg.exec(itemElement.getAttribute('data-sku').toUpperCase().trim())) {
         let itemPointinY = itemElement.getBoundingClientRect().top;
 
         find = true;
@@ -336,5 +342,17 @@ export class InvoiceCustomerComponent implements AfterViewInit, OnInit {
       .map((x) => x.feePrice)
       .reduce((pre, cur) => pre + cur, 0);
     this.order.price = this.order.price + totalFeeOthers;
+  }
+
+  public getHotLine(staffName: string): string {
+    if (staffName === 'nhom_zalo406')
+      return '0913.268.406';
+    if (staffName === 'nhom_zalo409')
+      return '0918.567.409';
+    if (staffName === 'nhom_zalo404')
+      return '0936.786.404';
+    if (staffName === 'nhom_facebook')
+      return '0918.569.400';
+    return '';
   }
 }

@@ -35,7 +35,8 @@
                 "glob": "{webfonts/**/*,css/all.min.css}",
                 "input": "node_modules/@fortawesome/fontawesome-free",
                 "output": "assets/vendor/fontawesome"
-              }
+              },
+              "src/web.config"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",

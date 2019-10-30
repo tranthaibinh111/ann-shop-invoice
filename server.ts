@@ -27,8 +27,8 @@ const DIST_FOLDER = join(process.cwd(), 'dist/browser');
 // https://github.com/chimurai/http-proxy-middleware
 // Add middleware for http proxying
 const apiProxy = proxy({ target: 'http://ann-shop-server.com', changeOrigin: true });
-const imageProxy = proxy({ target: 'http://hethongann.com', changeOrigin: true });
-const noImageapiProxy = proxy({ target: 'http://hethongann.com', changeOrigin: true });
+const imageProxy = proxy({ target: 'http://system.hethongann.com', changeOrigin: true });
+const noImageapiProxy = proxy({ target: 'http://system.hethongann.com', changeOrigin: true });
 
 app.use('/api/v1', apiProxy);
 app.use('/uploads/images', imageProxy);
