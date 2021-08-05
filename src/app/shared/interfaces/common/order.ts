@@ -10,7 +10,6 @@ export interface Order {
   staffName: string,
   quantity: number,
   priceNotDiscount: number,
-  discountPerItem: number,
   discount: number,
   priceDiscount: number,
   refund: Refund | null,

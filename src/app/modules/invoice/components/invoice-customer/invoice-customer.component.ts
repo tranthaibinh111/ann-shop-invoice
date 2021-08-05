@@ -159,7 +159,7 @@ export class InvoiceCustomerComponent implements AfterViewInit, OnInit {
    * Kiểm tra xem có triết khấu không
    */
   get haveDiscount(): boolean {
-    if (this.order && this.order.discountPerItem > 0)
+    if (this.order && this.order.discount > 0)
       return true;
     else
       return false;
@@ -321,18 +321,22 @@ export class InvoiceCustomerComponent implements AfterViewInit, OnInit {
   private calculatedAllPrice() {
     let totalQuantity: number = 0;
     let totalPriceNotDiscount: number = 0;
+    let totalDiscount: number = 0;
 
     this.orderItems.forEach((item) => {
       totalQuantity += item.quantity;
-      totalPriceNotDiscount += item.totalPrice;
+      totalPriceNotDiscount += (item.price * item.quantity);
+      totalDiscount += (item.discount * item.quantity);
     })
 
     // Tổng số lượng
     this.order.quantity = totalQuantity;
     // Tiền chư triết khấu
     this.order.priceNotDiscount = totalPriceNotDiscount;
+    // Tổng tiền triết khấu
+    this.order.discount = totalDiscount;
     // Tiền qua triết khấu
-    this.order.priceDiscount = this.order.priceNotDiscount - (totalQuantity * this.order.discountPerItem);
+    this.order.priceDiscount = this.order.priceNotDiscount - this.order.discount;
     // Tiền qua trả hàng
     this.order.remainderMoney = this.order.priceDiscount - (this.order.refund ? this.order.refund.refundMoney : 0);
     // Tiền có phí vẩn chuyển

@@ -89,6 +89,7 @@
                 <tr>
                   <th class="index">#</th>
                   <th class="price">Giá</th>
+                  <th class="discount">Chiết khấu</th>
                   <th class="quantiy">Số lượng</th>
                   <th class="total-price">Tổng</th>
                 </tr>
@@ -104,7 +105,7 @@
                           [lazyLoad]="'uploads/images/85x113/' + item.product.avatar" [offset]="100">
                       </a>
                     </td>
-                    <td colspan="3" class="sku-tile">
+                    <td colspan="4" class="sku-tile">
                       <div class="content">
                         <strong>{{ item.product.sku }}</strong> - {{ item.product.title }}
                         <ng-template [ngIf]="item.product.color || item.product.size">
@@ -131,6 +132,7 @@
                   </tr>
                   <tr [className]="i % 2 == 0 ? 'even-row' : 'odd-row'">
                     <td class="price">{{ item.price | number }}</td>
+                    <td class="discount">{{ item.discount | number }}</td>
                     <td class="quantiy">{{ item.quantity | number }}</td>
                     <td class="total-price">{{ item.totalPrice | number }}</td>
                   </tr>
@@ -147,27 +149,23 @@
                 <!-- Bắt đâu: Tổng kết của đơn hàng -->
                 <!-- Số lượng đã mua -->
                 <tr>
-                  <td colspan="3" class="thick-line text-right">Số lượng</td>
+                  <td colspan="4" class="thick-line text-right">Số lượng</td>
                   <td class="thick-line text-right">{{ order?.quantity | number }}</td>
                 </tr>
                 <!-- Thành tiền -->
                 <tr>
-                  <td colspan="3" class="no-line text-right">Thành tiền</td>
+                  <td colspan="4" class="no-line text-right">Thành tiền</td>
                   <td class="no-line text-right">{{ order?.priceNotDiscount | number }}</td>
                 </tr>
 
                 <!-- Bắt đâu: Thể hiện thông tin triết khấu của đơn hàng -->
                 <ng-template [ngIf]="haveDiscount">
                   <tr>
-                    <td colspan="3" class="no-line text-right">Chiết khấu mỗi cái</td>
-                    <td class="no-line text-right">{{ order?.discountPerItem | number }}/cái</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3" class="no-line text-right">Tổng chiết khấu</td>
+                    <td colspan="4" class="no-line text-right">Tổng chiết khấu</td>
                     <td class="no-line text-right">{{ order?.discount | number }}</td>
                   </tr>
                   <tr>
-                    <td colspan="3" class="no-line text-right">Sau khi chiết khấu</td>
+                    <td colspan="4" class="no-line text-right">Sau khi chiết khấu</td>
                     <td class="no-line text-right">{{ order?.priceDiscount | number }}</td>
                   </tr>
                 </ng-template>
@@ -176,11 +174,11 @@
                 <!-- Bắt đầu: Thể hiện thông tin đơn hàng đổi trả -->
                 <ng-template [ngIf]="haveRefund">
                   <tr>
-                    <td colspan="3" class="no-line text-right">Trừ tiền hàng trả (đơn {{ order?.refund?.id }})</td>
+                    <td colspan="4" class="no-line text-right">Trừ tiền hàng trả (đơn {{ order?.refund?.id }})</td>
                     <td class="no-line text-right">{{ order?.refund?.refundMoney | number }}</td>
                   </tr>
                   <tr>
-                    <td colspan="3" class="no-line text-right">Tổng tiền còn lại</td>
+                    <td colspan="4" class="no-line text-right">Tổng tiền còn lại</td>
                     <td class="no-line text-right">{{ order?.remainderMoney | number }}</td>
                   </tr>
                 </ng-template>
@@ -188,14 +186,14 @@
 
                 <!-- Tiền phí vận chuyển -->
                 <tr *ngIf="haveShipping">
-                  <td colspan="3" class="no-line text-right">Phí vận chuyển</td>
+                  <td colspan="4" class="no-line text-right">Phí vận chuyển</td>
                   <td class="no-line text-right">{{ order?.feeShipping | number }}</td>
                 </tr>
 
                 <!-- Bắt đầu: Thể hiện thông tin các loại phí khác -->
                 <ng-template ngFor let-fee [ngForOf]="order?.feeOthers">
                   <tr *ngIf="fee?.feePrice !== 0">
-                    <td colspan="3" class="no-line text-right">{{ fee?.feeName }}</td>
+                    <td colspan="4" class="no-line text-right">{{ fee?.feeName }}</td>
                     <td class="no-line text-right">{{ fee?.feePrice | number }}</td>
                   </tr>
                 </ng-template>
@@ -203,7 +201,7 @@
 
                 <!-- Tổng tiền của đơn hàng -->
                 <tr>
-                  <td colspan="3" class="no-line text-right"><strong>Tổng cộng</strong></td>
+                  <td colspan="4" class="no-line text-right"><strong>Tổng cộng</strong></td>
                   <td class="no-line text-right"><strong>{{ order?.price | number }}</strong></td>
                 </tr>
                 <!-- Kết thúc: Tổng kết của đơn hàng -->
