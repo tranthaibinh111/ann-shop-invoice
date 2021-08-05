@@ -127,6 +127,7 @@ export class ModalAddOrderItemComponent implements OnDestroy {
         quantity: 1,
         quantityControl: new FormControl(1, Validators.required),
         price: productOrdered.price,
+        discount: 0,
         totalPrice: productOrdered.price
       };
       this.orderItems.push(orderItemNew);
